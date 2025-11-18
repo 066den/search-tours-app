@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'icon'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'icon' | 'text'
   size?: 'sm' | 'md' | 'lg'
   fullWidth?: boolean
   children: ReactNode
@@ -28,6 +28,7 @@ const Button = ({
     ghost:
       'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2',
     icon: 'bg-transparent text-gray-400 hover:text-gray-600 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2',
+    text: 'bg-transparent text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors text-left',
   }
 
   const sizeStyles = {

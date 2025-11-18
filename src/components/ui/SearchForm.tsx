@@ -1,19 +1,32 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import type { ChangeEvent, KeyboardEvent, FormEvent } from 'react'
-import type { GeoEntity, Country, Hotel } from '../../types'
+import type { GeoEntity, Country, City, Hotel } from '../../types'
 import Dropdown from './DropDown'
 import { FaHotel, FaMapMarkerAlt } from 'react-icons/fa'
 import Button from './Button'
 import Input from './Input'
 import { fetchCountries, fetchGeo } from '../../utils/api'
+import { useToursStore } from '../../store/useToursStore'
 
 interface SearchFormProps {
   onSubmit?: (selectedEntity: GeoEntity | null, countryID?: string) => void
 }
 
 const SearchForm = ({ onSubmit }: SearchFormProps) => {
-  const [inputValue, setInputValue] = useState('')
-  const [selectedEntity, setSelectedEntity] = useState<GeoEntity | null>(null)
+  const {
+    searchQuery,
+    selectedEntity: savedSelectedEntity,
+    setSearchQuery,
+    setSelectedEntity,
+    clearSearch,
+  } = useToursStore()
+
+  const { isSearching } = useToursStore()
+
+  const [inputValue, setInputValue] = useState(() => searchQuery || '')
+  const [selectedEntity, setSelectedEntityLocal] = useState<GeoEntity | null>(
+    () => savedSelectedEntity
+  )
   const [suggestions, setSuggestions] = useState<GeoEntity[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -72,6 +85,8 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setInputValue(value)
+    setSearchQuery(value)
+    setSelectedEntityLocal(null)
     setSelectedEntity(null)
 
     if (value.trim()) {
@@ -83,25 +98,44 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
   }
 
   const handleSelectEntity = (entity: GeoEntity) => {
+    setSelectedEntityLocal(entity)
     setSelectedEntity(entity)
     setInputValue(entity.name)
+    setSearchQuery(entity.name)
     setIsOpen(false)
   }
 
   const handleClear = () => {
     setInputValue('')
+    setSearchQuery('')
+    setSelectedEntityLocal(null)
     setSelectedEntity(null)
     setSuggestions([])
     setIsOpen(false)
     inputRef.current?.focus()
+    clearSearch()
   }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     setIsOpen(false)
     if (onSubmit) {
-      const countryID = selectedEntity?.type === 'country' ? selectedEntity.id : undefined
+      let countryID: string | undefined
+      if (selectedEntity) {
+        if (selectedEntity.type === 'country') {
+          countryID = selectedEntity.id
+        } else if (selectedEntity.type === 'city') {
+          countryID = (selectedEntity as City & { countryId?: string }).countryId
+        } else if (selectedEntity.type === 'hotel') {
+          countryID = (selectedEntity as Hotel).countryId
+        }
+      }
       onSubmit(selectedEntity, countryID)
+    }
+
+    setSearchQuery(inputValue)
+    if (selectedEntity) {
+      setSelectedEntity(selectedEntity)
     }
   }
 
@@ -182,8 +216,8 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
         />
       </div>
 
-      <Button type="submit" size="lg" fullWidth>
-        Знайти
+      <Button type="submit" size="lg" disabled={isLoading || isSearching} fullWidth>
+        {isSearching ? 'Завантаження...' : 'Знайти'}
       </Button>
     </form>
   )

@@ -16,7 +16,7 @@ export const useSearchTours = () => {
 
       await searchToursUtil(countryID, {
         onStart: (token, waitUntil) => {
-          startSearch(token, waitUntil)
+          startSearch(token, waitUntil, countryID)
         },
         onSuccess: (prices: PricesMap) => {
           setPrices(prices)
