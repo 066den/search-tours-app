@@ -1,13 +1,13 @@
 import { Routes, Route } from 'react-router-dom'
-import Home from './pages/Home'
-import TourDetails from './pages/TourDetails'
+import HomePage from './pages/HomePage'
+import TourPage from './pages/TourPage'
 import { ROUTES } from './constants'
 
 const App = () => {
   return (
     <Routes>
-      <Route path={ROUTES.HOME} element={<Home />} />
-      <Route path={ROUTES.TOUR_DETAILS} element={<TourDetails />} />
+      <Route path={ROUTES.HOME} element={<HomePage />} />
+      <Route path={ROUTES.TOUR_DETAILS} element={<TourPage />} />
     </Routes>
   )
 }

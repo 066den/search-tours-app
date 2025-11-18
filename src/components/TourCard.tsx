@@ -3,10 +3,11 @@ import type { Tour, CountriesMap } from '../types'
 import { formatDate, formatPrice } from '../utils/format'
 import { fetchCountries } from '../utils/api'
 import Button from './ui/Button'
+import Card from './ui/Card'
 
 interface TourCardProps {
   tour: Tour
-  onOpenPrice?: (tourId: string) => void
+  onOpenPrice?: (priceId: string, hotelId?: number) => void
 }
 
 const countriesCache = new Map<string, CountriesMap>()
@@ -52,12 +53,12 @@ const TourCard = ({ tour, onOpenPrice }: TourCardProps) => {
 
   const handleOpenPrice = () => {
     if (onOpenPrice) {
-      onOpenPrice(tour.id)
+      onOpenPrice(tour.id, hotel?.id)
     }
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300 cursor-pointer">
+    <Card variant="default" padding="none" className="min-w-[250px] flex flex-col">
       <div className="w-full h-48 bg-gray-200 overflow-hidden">
         <img
           src={hotel.img}
@@ -95,11 +96,11 @@ const TourCard = ({ tour, onOpenPrice }: TourCardProps) => {
           <p className="text-2xl font-bold text-gray-900">{formatPrice(priceOffer.amount)}</p>
         </div>
 
-        <Button onClick={handleOpenPrice} variant="text" size="sm">
+        <Button onClick={handleOpenPrice} variant="text">
           Відкрити ціну
         </Button>
       </div>
-    </div>
+    </Card>
   )
 }
 

@@ -1,18 +1,20 @@
+import { useNavigate } from 'react-router-dom'
 import SearchForm from '../components/ui/SearchForm'
 import ToursGrid from '../components/ToursGrid'
+import Card from '../components/ui/Card'
 import { useSearchTours } from '../hooks/useSearchTours'
 import { useToursStore } from '../store/useToursStore'
+import { ROUTES } from '../constants'
 import type { GeoEntity, City, Hotel } from '../types'
 
-function Home() {
+const HomePage = () => {
+  const navigate = useNavigate()
   const { searchTours } = useSearchTours()
   const { setFilterEntity } = useToursStore()
 
   const handleSearchSubmit = (selectedEntity: GeoEntity | null, countryID?: string) => {
-    // Save selected entity for filtering (only on submit)
     setFilterEntity(selectedEntity)
 
-    // Use provided countryID or extract from selected entity
     const targetCountryID =
       countryID ||
       (() => {
@@ -32,18 +34,22 @@ function Home() {
     }
   }
 
-  const handleOpenPrice = (tourId: string) => {
-    // TODO: Implement price opening functionality
-    console.log('Open price for tour:', tourId)
+  const handleOpenPrice = (priceId: string, hotelId?: number) => {
+    if (!hotelId) {
+      console.warn('Hotel ID is missing for tour:', priceId)
+      return
+    }
+    const tourPath = ROUTES.TOUR_DETAILS.replace(':id', priceId)
+    navigate(`${tourPath}?hotelId=${hotelId}`)
   }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">Форма пошуку турів</h1>
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <Card variant="default" padding="md" className="mb-8">
           <SearchForm onSubmit={handleSearchSubmit} />
-        </div>
+        </Card>
 
         <ToursGrid onOpenPrice={handleOpenPrice} />
       </div>
@@ -51,4 +57,4 @@ function Home() {
   )
 }
 
-export default Home
+export default HomePage

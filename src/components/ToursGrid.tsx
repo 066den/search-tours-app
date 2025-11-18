@@ -3,7 +3,7 @@ import { useToursStore } from '../store/useToursStore'
 import { useToursWithHotels } from '../hooks/useToursWithHotels'
 
 interface ToursGridProps {
-  onOpenPrice?: (tourId: string) => void
+  onOpenPrice?: (priceId: string, hotelId?: number) => void
 }
 
 const ToursGrid = ({ onOpenPrice }: ToursGridProps) => {
@@ -61,7 +61,7 @@ const ToursGrid = ({ onOpenPrice }: ToursGridProps) => {
 
   return (
     <div className="w-full max-w-[700px] mx-auto px-[25px]">
-      <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6">
+      <div className="grid sm:grid-cols-2 grid-cols-1 gap-6">
         {tours.map(tour => (
           <TourCard key={tour.id} tour={tour} onOpenPrice={onOpenPrice} />
         ))}

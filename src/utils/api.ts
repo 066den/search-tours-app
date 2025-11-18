@@ -1,4 +1,4 @@
-import { getCountries, searchGeo, startSearchPrices, getSearchPrices, getHotels } from '../api/api'
+import { getCountries, searchGeo, startSearchPrices, getSearchPrices, getHotels, getHotel, getPrice } from '../api/api'
 import type {
   CountriesMap,
   ErrorResponse,
@@ -6,6 +6,8 @@ import type {
   StartSearchResponse,
   GetSearchPricesResponse,
   HotelsMap,
+  HotelDetails,
+  PriceOffer,
 } from '../types'
 
 const parseResponse = async <T>(response: Response): Promise<T> => {
@@ -39,4 +41,14 @@ export const fetchSearchPrices = async (token: string): Promise<GetSearchPricesR
 export const fetchHotels = async (countryID: string): Promise<HotelsMap> => {
   const response = await getHotels(countryID)
   return parseResponse<HotelsMap>(response)
+}
+
+export const fetchHotel = async (hotelId: number | string): Promise<HotelDetails> => {
+  const response = await getHotel(hotelId)
+  return parseResponse<HotelDetails>(response)
+}
+
+export const fetchPrice = async (priceId: string): Promise<PriceOffer> => {
+  const response = await getPrice(priceId)
+  return parseResponse<PriceOffer>(response)
 }
