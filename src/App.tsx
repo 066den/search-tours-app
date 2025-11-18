@@ -3,7 +3,7 @@ import Home from './pages/Home'
 import TourDetails from './pages/TourDetails'
 import { ROUTES } from './constants'
 
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path={ROUTES.HOME} element={<Home />} />
@@ -11,5 +11,4 @@ function App() {
     </Routes>
   )
 }
-
 export default App
