@@ -8,7 +8,7 @@ import Input from './Input'
 import { fetchCountries, fetchGeo } from '../../utils/api'
 
 interface SearchFormProps {
-  onSubmit?: (selectedEntity: GeoEntity | null) => void
+  onSubmit?: (selectedEntity: GeoEntity | null, countryID?: string) => void
 }
 
 const SearchForm = ({ onSubmit }: SearchFormProps) => {
@@ -100,7 +100,8 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
     e.preventDefault()
     setIsOpen(false)
     if (onSubmit) {
-      onSubmit(selectedEntity)
+      const countryID = selectedEntity?.type === 'country' ? selectedEntity.id : undefined
+      onSubmit(selectedEntity, countryID)
     }
   }
 
