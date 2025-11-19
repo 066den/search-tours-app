@@ -15,6 +15,7 @@ interface SearchCallbacks {
   onSuccess: (prices: PricesMap) => void
   onError: (message: string) => void
   onAbort?: () => boolean
+  isTokenValid?: (token: string) => boolean
 }
 
 export const searchTours = async (countryID: string, callbacks: SearchCallbacks): Promise<void> => {
@@ -38,10 +39,18 @@ export const searchTours = async (countryID: string, callbacks: SearchCallbacks)
         const pricesResponse = await fetchSearchPrices(currentToken)
         if (callbacks.onAbort?.()) return
 
+        if (callbacks.isTokenValid && !callbacks.isTokenValid(currentToken)) {
+          return
+        }
+
         callbacks.onSuccess(pricesResponse.prices)
         return
       } catch (error) {
         if (callbacks.onAbort?.()) return
+
+        if (callbacks.isTokenValid && !callbacks.isTokenValid(currentToken)) {
+          return
+        }
 
         const errorResponse = error as ErrorResponse
 

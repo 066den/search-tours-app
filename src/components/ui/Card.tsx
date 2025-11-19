@@ -15,7 +15,7 @@ const Card = ({
   className = '',
   ...props
 }: CardProps) => {
-  const baseStyles = 'bg-white rounded-lg overflow-hidden'
+  const baseStyles = 'bg-white rounded-lg'
 
   const variantStyles = {
     default: 'shadow-md',

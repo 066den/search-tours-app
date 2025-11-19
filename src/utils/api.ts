@@ -1,10 +1,11 @@
-import { getCountries, searchGeo, startSearchPrices, getSearchPrices, getHotels, getHotel, getPrice } from '../api/api'
+import { getCountries, searchGeo, startSearchPrices, getSearchPrices, stopSearchPrices, getHotels, getHotel, getPrice } from '../api/api'
 import type {
   CountriesMap,
   ErrorResponse,
   GeoResponse,
   StartSearchResponse,
   GetSearchPricesResponse,
+  StopSearchResponse,
   HotelsMap,
   HotelDetails,
   PriceOffer,
@@ -36,6 +37,11 @@ export const fetchStartSearchPrices = async (countryID: string): Promise<StartSe
 export const fetchSearchPrices = async (token: string): Promise<GetSearchPricesResponse> => {
   const response = await getSearchPrices(token)
   return parseResponse<GetSearchPricesResponse>(response)
+}
+
+export const fetchStopSearchPrices = async (token: string): Promise<StopSearchResponse> => {
+  const response = await stopSearchPrices(token)
+  return parseResponse<StopSearchResponse>(response)
 }
 
 export const fetchHotels = async (countryID: string): Promise<HotelsMap> => {

@@ -83,6 +83,7 @@ export const useToursStore = create<ToursState>()(
         prices: state.prices,
         searchToken: state.searchToken,
         waitUntil: state.waitUntil,
+        hasSearched: state.hasSearched,
         currentCountryID: state.currentCountryID,
         searchQuery: state.searchQuery,
         selectedEntity: state.selectedEntity,

@@ -203,7 +203,7 @@ const SearchForm = ({ onSubmit }: SearchFormProps) => {
           onClose={() => setIsOpen(false)}
           renderItem={(entity: GeoEntity) => (
             <div className="flex items-center gap-2">
-              <span className="flex-shrink-0">{getIcon(entity)}</span>
+              <span className="shrink-0">{getIcon(entity)}</span>
               <span className="flex-1 text-gray-900">{entity.name}</span>
               {entity.type === 'hotel' && (
                 <span className="text-sm text-gray-500">{(entity as Hotel).cityName}</span>
