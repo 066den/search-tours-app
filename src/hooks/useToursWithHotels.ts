@@ -60,21 +60,23 @@ export const useToursWithHotels = () => {
     }
     const allTours = enrichToursWithHotels(prices, hotels)
 
-    if (!filterEntity) {
-      return allTours
-    }
+    let filteredTours: Tour[]
 
-    if (filterEntity.type === 'country') {
-      return allTours
+    if (!filterEntity) {
+      filteredTours = allTours
+    } else if (filterEntity.type === 'country') {
+      filteredTours = allTours
     } else if (filterEntity.type === 'city') {
       const cityId = (filterEntity as City).id
-      return allTours.filter(tour => tour.hotel?.cityId === cityId)
+      filteredTours = allTours.filter(tour => tour.hotel?.cityId === cityId)
     } else if (filterEntity.type === 'hotel') {
       const hotelId = (filterEntity as Hotel).id
-      return allTours.filter(tour => tour.hotel?.id === hotelId)
+      filteredTours = allTours.filter(tour => tour.hotel?.id === hotelId)
+    } else {
+      filteredTours = allTours
     }
 
-    return allTours
+    return [...filteredTours].sort((a, b) => a.priceOffer.amount - b.priceOffer.amount)
   }, [prices, hotels, filterEntity])
 
   return {
